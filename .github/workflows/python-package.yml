@@ -62,11 +62,12 @@ jobs:
     name: "Build and test ${{ matrix.pyver }} aarch64 wheel"
     strategy:
       matrix:
-        pyver: [ '3.6', '3.7', '3.8', '3.9' ]
+        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
       fail-fast: false
     runs-on: ubuntu-latest
     env:
-      py: python${{ matrix.pyver }}
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -76,20 +77,14 @@ jobs:
     - name: Build Wheel
       run: |
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-            arm64v8/ubuntu \
-            bash -exc 'apt-get update && \
-            apt install software-properties-common -y && \
-            add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
-            apt install -y ${{ env.py }}-venv && \
-            ${{ env.py }} -m venv .env && \
+            ${{ env.img }} \
+            bash -exc '${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
-            python --version && \
             pip install --upgrade pip && \
             pip install rich orjson && \
-            uname -m && \
-            pip install -r requirements-dev.txt && \
-            python setup.py bdist_wheel && \
+            if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi && \
+            python setup.py sdist bdist_wheel && \
             pip install dist/*.whl && \
             python -m unittest && \
+            uname -m && \
             deactivate'
