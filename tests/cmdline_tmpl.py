@@ -85,9 +85,9 @@ class CmdlineTmpl(BaseTmpl):
                 return None
         else:
             if os.getenv("COVERAGE_RUN"):
-                timeout = 90
+                timeout = 200
             else:
-                timeout = 60
+                timeout = 200
             try:
                 result = subprocess.run(cmd_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
             except subprocess.TimeoutExpired as e:
