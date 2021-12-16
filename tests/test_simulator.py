@@ -27,7 +27,7 @@ class SimInterface:
         self.sim_process = subprocess.Popen(commands,
                                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
         if expect_fail:
-            self.sim_process.wait(timeout=3)
+            self.sim_process.wait(timeout=15)
             self.sim_process.stdout.close()
             self.sim_process.stdin.close()
             self.returncode = self.sim_process.returncode
