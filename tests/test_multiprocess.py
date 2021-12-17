@@ -53,10 +53,10 @@ import time
 pid = os.fork()
 
 if pid > 0:
-    time.sleep(0.1)
+    time.sleep(2)
     print("parent")
 else:
-    time.sleep(2.5)
+    time.sleep(5)
     print("child")
 """
 
