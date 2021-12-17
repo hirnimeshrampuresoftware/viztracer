@@ -86,5 +86,4 @@ jobs:
             python setup.py sdist bdist_wheel && \
             pip install dist/*.whl && \
             python -m unittest && \
-            uname -m && \
             deactivate'
